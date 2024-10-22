@@ -1,11 +1,13 @@
-from flask import Flask, request, redirect, url_for, render_template
+from flask import Flask, request, redirect, url_for, render_template, session
 import os
 
 from utils_code.DataLoader import get_word_count_and_docs_from_youtube_url
 
 
 
+
 app = Flask(__name__)
+app.secret_key = 'SEC123'  # Set a secret key for session
 
 # Set upload folder and allowed extensions
 UPLOAD_FOLDER = 'uploads/'
@@ -59,16 +61,19 @@ def upload_file_or_url():
 
     return render_template('home.html')
 
-@app.route("/result", methods=['GET', 'POST'])
+
+@app.route("/result", methods=['GET','POST'])
 def display_content():
+
+    """This function displays the content based on the provided URL."""
     
-
-    word_count, docs = get_word_count_and_docs_from_youtube_url()
-
-    content = word_count
-
-    return render_template('result.html',content=content)
-
+    url_input = request.form.get('urlInput')  # Get the URL from the session
+    if url_input:
+        word_count, docs = get_word_count_and_docs_from_youtube_url(url_input)  # Pass the URL to your function
+        content = word_count
+        return render_template('result.html', content=content)
+    
+    return 'No URL provided!'  # Handle the case where no URL was stored
 
 
 if __name__ == '__main__':
