@@ -6,3 +6,9 @@ langchain_community
 langchain_core
 langchain_huggingface
 transformers
+pytube
+youtube-transcript-api
+langchain_pinecone
+langchain_groq
+dotenv
+flask
